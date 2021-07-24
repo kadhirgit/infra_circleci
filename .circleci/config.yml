@@ -5,9 +5,6 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "46:6e:23:f0:00:75:c4:3b:11:a6:f4:46:3f:41:47:97"
       - checkout
       - run:
           name: Ensure backend infrastructure exist
@@ -15,8 +12,16 @@ jobs:
             aws cloudformation deploy \
               --template-file template.yml \
               --stack-name my-stack
+  deploy-job:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "46:6e:23:f0:00:75:c4:3b:11:a6:f4:46:3f:41:47:97"
+
 workflows:
   my_workflow:
     jobs:
-
+      - deploy-job
       - create_infrastructure
